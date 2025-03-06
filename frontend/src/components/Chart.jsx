@@ -1,4 +1,3 @@
-import React from "react";
 import backgroundImage from "../assets/Images/creeper-in-whatsapp-default-backdrop-v0-bow5gv7xh6ba1.jpg";
 import TypeInput from "./TypeInput";
 import Messages from "./Messages";

@@ -1,23 +1,12 @@
 import React from "react";
 import User from "./User";
 
-const Users = () => {
+const Users = ({ users }) => {
   return (
     <div
-      style={{
-        maxHeight: "calc(90vh)", // Fixed height
-      }}
+      style={{ maxHeight: "calc(90vh)" }} // Fixed height
     >
-      <User />
-      <User />
-      <User />
-      <User />
-      <User />
-      <User />
-      <User />
-      <User />
-      <User />
-      <User />
+      <User users={users}  />
     </div>
   );
 };

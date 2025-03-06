@@ -1,6 +1,6 @@
 import React from "react";
 
-const Search = () => {
+const Search = ({ search, setSearch }) => {
   return (
     <>
       <label className="input mt-3">
@@ -24,6 +24,8 @@ const Search = () => {
           type="search"
           className="input-neutral text-[16px]"
           placeholder="Search"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </label>
     </>
