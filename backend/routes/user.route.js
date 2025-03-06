@@ -1,28 +1,28 @@
 const express = require("express");
 const {
-  SingupUserController,
+  SignupUserController,
   LoginUserController,
-  UserProfileController,
   LogoutUserController,
   UserSearchController,
+  GetAllUserController,
+  ProtectUserController,
 } = require("../controllers/user.controller");
 const { upload } = require("../helper/helpers");
-const { authUser } = require("../middleware/auth.middleware");
+const authUser = require("../middleware/auth.middleware");
 
 const userRoutes = express.Router();
 
-userRoutes.post(
-  "/singup-user",
-  upload.single("profileImage"),
-  SingupUserController
-);
+userRoutes.post("/signup", upload.single("profileImage"), SignupUserController);
 
-userRoutes.post("/login-user", LoginUserController);
+userRoutes.post("/login", LoginUserController);
 
-userRoutes.get("/profile", authUser, UserProfileController);
+userRoutes.get("/getUsers", authUser, GetAllUserController);
 
-userRoutes.get("/search-user", authUser, UserSearchController);
+userRoutes.get("/search", authUser, UserSearchController);
 
-userRoutes.get("/logout", authUser, LogoutUserController);
+userRoutes.post("/logout", authUser, LogoutUserController);
+
+// protect user
+userRoutes.get("/user-protect", authUser, ProtectUserController);
 
 module.exports = userRoutes;

@@ -6,14 +6,19 @@ const path = require('path');
 
 // hesh password
 module.exports.heshPass = async (password) => {
+  if (!password) {
+    throw new Error("Password is required.");
+  }
   try {
     const salt = 10;
     const heshPassword = await bcrypt.hash(password, salt);
     return heshPassword;
   } catch (error) {
-    console.log(error);
+    console.log("Error hashing password: ", error);
+    throw error; // Re-throw the error to handle it in the calling function
   }
 };
+
 
 // compare password
 module.exports.comparePass = async (password, ExistUserPass) => {
@@ -42,6 +47,7 @@ module.exports.Token = async (user) => {
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     const uploadDir = path.join(__dirname, "../uploads/");
+    
     if (!fs.existsSync(uploadDir)) {
       fs.mkdirSync(uploadDir, { recursive: true });
     }

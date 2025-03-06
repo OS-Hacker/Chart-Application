@@ -1,8 +1,7 @@
 const JWT = require("jsonwebtoken"); // Make sure you require jsonwebtoken
-const userModel = require("../models/user.model");
 const BlackListedTokenModel = require("../models/BlackListedTokens.model");
 
-module.exports.authUser = async (req, res, next) => {
+const authUser = async (req, res, next) => {
   try {
     console.log(req.headers.authorization);
     // Check if authorization header exists
@@ -30,6 +29,7 @@ module.exports.authUser = async (req, res, next) => {
     const decode = await JWT.verify(token, process.env.JWT_SECRET);
     req.user = decode;
 
+    // if all ok then go to next route
     next();
   } catch (error) {
     console.log(error);
@@ -39,3 +39,5 @@ module.exports.authUser = async (req, res, next) => {
     });
   }
 };
+
+module.exports = authUser;

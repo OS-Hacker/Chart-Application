@@ -17,11 +17,9 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      required: true,
     },
     confirm_pass: {
       type: String,
-      required: true,
     },
   },
   { timestamps: true }
