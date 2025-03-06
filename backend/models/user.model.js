@@ -12,6 +12,9 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowerCase: true,
     },
+    profileImage: {
+      type: String,
+    },
     password: {
       type: String,
       required: true,
@@ -26,4 +29,4 @@ const userSchema = new mongoose.Schema(
 
 const userModel = new mongoose.model("user", userSchema);
 
-module.exports = userModel
+module.exports = userModel;

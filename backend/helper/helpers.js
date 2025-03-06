@@ -1,5 +1,8 @@
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
+const multer = require('multer');
+const fs = require('fs');
+const path = require('path');
 
 // hesh password
 module.exports.heshPass = async (password) => {
@@ -33,3 +36,20 @@ module.exports.Token = async (user) => {
     console.log("Error generating token: ", error); // Log detailed error
   }
 };
+
+// multer image uplode
+
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(__dirname, "../uploads/");
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + path.extname(file.originalname)); // Appending extension
+  },
+});
+
+module.exports.upload = multer({ storage: storage });
