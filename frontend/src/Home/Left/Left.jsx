@@ -5,100 +5,137 @@ import Users from "../../components/Users";
 import { useAuth } from "../../context/AuthProvider";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { useUserStore } from "../../context/UserContext";
+import Profile from "../../components/Profile";
+import { useSocket } from "../../context/SocketContext";
+import { AlignJustify } from "lucide-react";
 
 const Left = () => {
-  //  Get ALL Users
-  const [users, setUsers] = useState([]);
+  const { users, setUsers, messages } = useUserStore(); // Remove `messages` if not needed
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null); // State to handle errors
+  const [search, setSearch] = useState("");
+  const { user } = useAuth();
+  const { onlineUsers, socket } = useSocket();
 
-  const [user] = useAuth();
-
-  console.log(users);
-
+  // Fetch all users
   const GetAllUsers = async () => {
+    setLoading(true);
+    setError(null); // Reset error state
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/api/users/getUsers`,
         {
           headers: {
-            Authorization: `Bearer ${user?.token}`, // Include the token in the request
+            Authorization: `Bearer ${user?.token}`,
           },
         }
       );
       if (response.status === 200) {
-        const data = response?.data;
-        setUsers(data?.user);
+        setUsers(response.data?.users);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error fetching users:", error);
+      setError("Failed to fetch users. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    GetAllUsers();
-  }, []);
-
-  // Search UserName
-
-  const [search, setSearch] = useState("");
-
+  // Search users by query
   const SearchUser = async (query) => {
     if (!query) {
-      setUsers(users); // Reset to all users if search query is empty
+      GetAllUsers(); // Reset to all users if search query is empty
       return;
     }
+    setLoading(true);
+    setError(null); // Reset error state
     try {
       const response = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/api/users/search?search=${query}`,
         {
           headers: {
-            Authorization: `Bearer ${user?.token}`, // Include the token in the request
+            Authorization: `Bearer ${user?.token}`,
           },
         }
       );
       if (response.status === 200) {
-        const data = response?.data;
-        setUsers(data?.users);
+        setUsers(response.data?.users);
       }
     } catch (error) {
-      console.log(error);
+      console.error("Error searching users:", error);
+      setError("Failed to search users. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Fetch all users on component mount
   useEffect(() => {
-    if (search.trim() !== "") {
-      SearchUser(search);
-    } else {
-      GetAllUsers(); // Reset to all users
-    }
+    GetAllUsers();
+  }, []); // Empty dependency array to ensure it only runs on mount
+
+  // Debounce search input to reduce API calls
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (search.trim() !== "") {
+        SearchUser(search);
+      } else {
+        GetAllUsers(); // Reset to all users
+      }
+    }, 500); // 500ms debounce delay
+
+    return () => clearTimeout(delayDebounceFn);
   }, [search]);
 
   return (
     <div
-      className="w-[25%] text-white px-8 h-screen flex flex-col"
+      className="w-full text-white px-5 h-screen"
       style={{ backgroundColor: "#191E24" }}
     >
       {/* Header Section */}
       <div className="flex justify-between align-center mt-4 mb-4">
-        <h3 className="text-xl font-bold">Chart</h3>
+        <h3 className="text-xl font-bold">Chat</h3>
         <div className="icon mt-2 text-lg cursor-pointer hover:text-green-500">
-          <FiEdit />
+          <FiEdit
+            onClick={() => document.getElementById("my_modal_1").showModal()}
+          />
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="mb-4">
+      <div className="">
         <Search search={search} setSearch={setSearch} />
       </div>
 
-      {/* Users Section with Hidden Scrollbar */}
+      {/* Users Section */}
       <div className="flex-1 overflow-y-auto hide-scrollbar">
-        <Users users={users} />
+        {error ? (
+          <div className="text-center text-red-500">{error}</div> // Show error message
+        ) : (
+          <Users users={users} loading={loading} />
+        )}
       </div>
 
       {/* Logout Section */}
-      <div className="py-4">
+      <div className="">
         <Logout />
       </div>
+
+      {/* Profile Modal */}
+      <dialog id="my_modal_1" className="modal">
+        <div className="modal-box">
+          <h3 className="font-bold text-lg lg:ml-60">Profile</h3>
+          <div className="modal-action">
+            <div className="">
+              <Profile />
+            </div>
+          </div>
+            <form method="dialog" className="">
+              <button className="btn">Close</button>
+            </form>
+        </div>
+      </dialog>
     </div>
   );
 };

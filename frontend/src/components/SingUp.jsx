@@ -1,26 +1,26 @@
 import { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthProvider";
+import { BsEyeFill, BsEyeSlash } from "react-icons/bs";
+import imagePic from "../assets/Images/avatar.png";
 
-const SingUp = () => {
+const SignUp = () => {
   const [formData, setFormData] = useState({
     userName: "",
     email: "",
     password: "",
-    confirm_pass: "",
   });
 
   const [profileImage, setProfileImage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // Loading state
+  const [togglePassword, setTogglPassword] = useState(false);
 
   const handleProfileImage = (e) => {
     setProfileImage(e.target.files[0]);
     setError("");
-    setLoading(false);
   };
 
   const handleChange = (e) => {
@@ -29,59 +29,22 @@ const SingUp = () => {
       ...prevFormData,
       [name]: value,
     }));
-
-    // remove error
     setError("");
-
-    setLoading(false);
   };
 
-  const Navigate = useNavigate();
-
-  const [user, setUser] = useAuth();
+  const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true
+    setLoading(true);
 
-    const { userName, email, password, confirm_pass } = formData;
-
-    // validations
-
-    if (!userName.trim() || !email.trim() || !password.trim()) {
-      setError("All Fields Required!");
-      return;
-    }
-
-    const regex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
-
-    // email
-    if (!regex.test(email)) {
-      setError("Please Enter Valid Email!");
-      return;
-    }
-
-    // check password & confirm_pass
-    if (password !== confirm_pass) {
-      setError("Passwords do not match");
-      return;
-    } else if (password.length < 8) {
-      setError("Password should be greater than 8 character");
-      return;
-    }
-
-    // Check if profile image is selected
-    if (!profileImage) {
-      setError("Please select a profile image");
-      return;
-    }
+    const { userName, email, password } = formData;
 
     const formDataToSend = new FormData();
-
     formDataToSend.append("userName", userName);
     formDataToSend.append("email", email);
     formDataToSend.append("password", password);
-    formDataToSend.append("confirm_pass", confirm_pass);
     if (profileImage) {
       formDataToSend.append("profileImage", profileImage);
     }
@@ -95,33 +58,19 @@ const SingUp = () => {
       if (response.status === 201) {
         const data = response.data;
         localStorage.setItem("user", JSON.stringify(data));
-        toast.success(data.msg, {
-          position: "top-center",
-        });
-        Navigate("/");
+        toast.success(data.msg, { position: "top-center" });
+        navigate("/");
         setUser(data);
-        setFormData({
-          userName: "",
-          email: "",
-          password: "",
-          confirm_pass: "",
-        });
+        setFormData({ userName: "", email: "", password: "" });
         setProfileImage(null);
       }
     } catch (error) {
-      console.error("Signup error:", error);
-      if (error.response) {
-        setError(
-          error.response.data.message ||
-            "An error occurred while creating the account. Please try again."
-        );
-
-        toast.error(response?.error?.data?.msg || "Failed to update user", {
-          position: "top-center",
-        });
-      }
+      toast.error(error.response?.data?.msg, {
+        position: "top-center",
+      });
+      console.log(error.response?.data?.msg);
     } finally {
-      setLoading(false); // Reset loading state
+      setLoading(false);
     }
   };
 
@@ -139,11 +88,13 @@ const SingUp = () => {
                     className="cursor-pointer"
                   />
                 ) : (
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                    alt="Default Profile"
-                    className="cursor-pointer"
-                  />
+                  <div className="relative">
+                    <img
+                      src={imagePic}
+                      alt="Default Profile"
+                      className="cursor-pointer"
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -178,41 +129,31 @@ const SingUp = () => {
             placeholder="email@example.com"
           />
 
-          <h3 className="text-lg font-medium mb-2">
-            Enter Password & Confirm-password
-          </h3>
-
-          <div className="flex gap-4 mb-7">
+          <h3 className="text-lg font-medium mb-2">Enter Password</h3>
+          <label className="relative">
             <input
-              className="bg-[#eeeeee] w-1/2 text-black rounded-lg px-4 py-2 border text-lg placeholder:text-base"
-              type="password"
+              className="bg-[#eeeeee] mb-7 text-black w-full rounded-lg px-4 py-2 border text-lg placeholder:text-base relative"
+              type={togglePassword ? "text" : "password"}
               placeholder="Password"
               value={formData.password}
               name="password"
               onChange={handleChange}
             />
-            <input
-              className="bg-[#eeeeee] w-1/2 text-black rounded-lg px-4 py-2 border text-lg placeholder:text-base"
-              type="password"
-              placeholder="Confirm-password"
-              value={formData.confirm_pass}
-              name="confirm_pass"
-              onChange={handleChange}
-            />
-          </div>
-
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+            <span
+              className="absolute right-5 top-1 text-black cursor-pointer text-lg"
+              onClick={() => setTogglPassword((prev) => !prev)}
+              aria-label={togglePassword ? "Hide password" : "Show password"}
+            >
+              {togglePassword ? <BsEyeSlash /> : <BsEyeFill />}
+            </span>
+          </label>
 
           <button
             type="submit"
             className="bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base cursor-pointer"
             disabled={loading}
           >
-            {loading ? (
-              <span className="loading loading-infinity loading-lg"></span>
-            ) : (
-              "Create account"
-            )}
+            {loading ? "Loading..." : "Create account"}
           </button>
         </form>
 
@@ -227,4 +168,4 @@ const SingUp = () => {
   );
 };
 
-export default SingUp;
+export default SignUp;

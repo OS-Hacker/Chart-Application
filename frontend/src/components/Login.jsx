@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthProvider";
+import { MessageSquare } from "lucide-react";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -13,17 +14,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false); // Loading state
   const navigate = useNavigate(); // For navigation after login
 
-  // Set axios default headers if the user is authenticated
-
-  const [user, setUser] = useAuth();
-
-  useEffect(() => {
-    if (user?.token) {
-      axios.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
-    } else {
-      delete axios.defaults.headers.common["Authorization"];
-    }
-  }, [user?.token]);
+  const { user, setUser } = useAuth();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -47,9 +38,9 @@ const Login = () => {
 
       if (response.status === 200) {
         const data = response.data;
-        const user = data?.user?.userName.split(" ")[0];
+        let userName = data?.user?.userName.split(" ")[0];
 
-        toast.success(`Welcome ${user} 👋`, {
+        toast.success(`Welcome ${userName} 👋`, {
           position: "top-center",
         });
 
@@ -68,12 +59,9 @@ const Login = () => {
       }
     } catch (error) {
       console.error(error);
-      toast.error(
-        error.response?.data?.msg || "An error occurred during login",
-        {
-          position: "bottom-center",
-        }
-      );
+      toast.error(error.response?.data?.msg, {
+        position: "top-center",
+      });
     } finally {
       setLoading(false); // Reset loading state
     }
@@ -82,10 +70,16 @@ const Login = () => {
   return (
     <div className="flex justify-center align-center w-full mt-48">
       <div>
+        <div
+          className="w-16 h-16 rounded-2xl m-auto mb-4 bg-primary/10 flex items-center
+                     justify-center animate-bounce"
+        >
+          <MessageSquare className="w-8 h-8 text-primary " />
+        </div>
         <form onSubmit={submitHandler}>
           <h3 className="text-lg font-medium mb-2">What's your email</h3>
           <input
-            required
+            // required
             value={formData.email}
             name="email"
             onChange={handleChange}
@@ -100,7 +94,7 @@ const Login = () => {
             value={formData.password}
             name="password"
             onChange={handleChange}
-            required
+            // required
             type="password"
             placeholder="password"
           />
@@ -110,17 +104,13 @@ const Login = () => {
             disabled={loading} // Disable button when loading
             className="bg-[#111] text-white cursor-pointer font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {loading ? (
-              <span className="loading loading-infinity loading-lg"></span>
-            ) : (
-              "Login"
-            )}
+            {loading ? "Loading..." : "Login"}
           </button>
         </form>
 
         <p className="text-center">
-          New here?{" "}
-          <Link to="/signup" className="text-blue-600 cursor-pointer">
+          New here?{"  "}
+          <Link to="/signup" className="text-blue-600 cursor-pointer ml-1">
             Create new Account
           </Link>
         </p>

@@ -22,8 +22,14 @@ const AuthProvider = ({ children }) => {
     delete axios.defaults.headers.common["Authorization"]; // Remove token from axios headers
   };
 
+  //
+
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
   return (
-    <AuthContext.Provider value={[user, setUser, logout]}>
+    <AuthContext.Provider
+      value={{ user, setUser, logout, isDrawerOpen, setIsDrawerOpen }}
+    >
       {children}
     </AuthContext.Provider>
   );

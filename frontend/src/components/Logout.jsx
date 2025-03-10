@@ -1,13 +1,13 @@
 import React from "react";
 import { LuLogOut } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthProvider";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useAuth } from "../context/AuthProvider";
 
 const Logout = () => {
   const navigate = useNavigate();
-  const [user, logout] = useAuth();
+  const { user, setUser, logout } = useAuth();
 
   const handleLogout = async () => {
     try {
@@ -15,7 +15,6 @@ const Logout = () => {
       await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/users/logout`,
         {},
-
         {
           headers: {
             Authorization: `Bearer ${user?.token}`, // Include the token in the request
@@ -40,7 +39,7 @@ const Logout = () => {
   return (
     <LuLogOut
       onClick={handleLogout}
-      className="font-bold text-2xl cursor-pointer hover:text-red-600 absolute bottom-5"
+      className="font-bold text-2xl cursor-pointer hover:text-red-600 absolute bottom-8"
     />
   );
 };

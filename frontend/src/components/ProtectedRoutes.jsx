@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 
 const ProtectedRoutes = () => {
-  const [user] = useAuth();
+  const {user} = useAuth();
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(true); // Add a loading state
   const navigate = useNavigate();
@@ -46,8 +46,8 @@ const ProtectedRoutes = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center align-center w-full">
-        <span className="loading loading-infinity loading-xl text-3xl"></span>
+      <div className="flex justify-center align-center w-full mt-72">
+        <span className="loading loading-dots loading-xl "></span>
       </div>
     ); // Render a loading indicator while checking auth
   }

@@ -3,7 +3,6 @@ const BlackListedTokenModel = require("../models/BlackListedTokens.model");
 
 const authUser = async (req, res, next) => {
   try {
-    console.log(req.headers.authorization);
     // Check if authorization header exists
     if (!req.headers.authorization) {
       return res.status(401).send({ msg: "Unauthorized - No token provided" });
