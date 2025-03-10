@@ -28,10 +28,10 @@ App.use("/api/message", messageRoutes);
 // ---- code for deployment -----
 const dirPath= path.resolve();
 if(process.env.NODE_ENV === "production"){
-   App.use(express.static(path.join(dirPath,"../Frontend/dist")));
+   App.use(express.static(path.join(dirPath,"../frontend/dist")));
 
    App.get("*",()=>{
-    res.sendFile(path.join(dirPath,"../Frontend","dist","index.html"))
+    res.sendFile(path.join(dirPath,"../frontend","dist","index.html"))
    })
 }
 
