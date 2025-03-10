@@ -26,9 +26,13 @@ App.use("/api/users", userRoutes);
 App.use("/api/message", messageRoutes);
 
 // ---- code for deployment -----
+const dirPath= path.resolve();
 if(process.env.NODE_ENV === "production"){
-  const dirPath= path.resolve();
-  
+   App.use(express.static(path.join(dirPath,"../Frontend/dist")));
+
+   App.get("*",()=>{
+    res.sendFile(path.join(dirPath,"../Frontend","dist","index.html"))
+   })
 }
 
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
