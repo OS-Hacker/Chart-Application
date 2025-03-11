@@ -4,7 +4,7 @@ const connectDb = require("./db/db.connect");
 const userRoutes = require("./routes/user.route");
 const messageRoutes = require("./routes/message.route");
 const cors = require("cors");
-const path = require('path');
+const path = require("path");
 dotenv.config();
 
 const { App, server } = require("./SocketIo/server");
@@ -17,7 +17,6 @@ App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 App.use("/uploads", express.static("uploads"));
 
-
 // Database connection
 connectDb();
 
@@ -26,13 +25,13 @@ App.use("/api/users", userRoutes);
 App.use("/api/message", messageRoutes);
 
 // ---- code for deployment -----
-const dirPath= path.resolve();
-if(process.env.NODE_ENV === "production"){
-   App.use(express.static(path.join(dirPath,"../frontend/dist")));
+const dirPath = path.resolve();
+if (process.env.NODE_ENV === "production") {
+  App.use(express.static(path.join(dirPath, "../frontend/dist")));
 
-   App.get("*",()=>{
-    res.sendFile(path.join(dirPath,"../frontend","dist","index.html"))
-   })
+  App.get("*", (req, res) => {
+    res.sendFile(path.join(dirPath, "../frontend", "dist", "index.html"));
+  });
 }
 
 server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
