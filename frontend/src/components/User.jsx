@@ -41,6 +41,7 @@ const User = ({ users, loading }) => {
         const { _id, userName, email, profileImage } = user;
         const isSelected = selectedUser?._id === _id;
         const isOnline = onlineUsers.includes(user._id);
+
         const imageUrl = `${
           import.meta.env.VITE_BASE_URL
         }/uploads/${profileImage}`;
@@ -56,13 +57,7 @@ const User = ({ users, loading }) => {
             {/* Avatar Section */}
             <div className={`avatar ${isOnline ? "avatar-online" : ""}`}>
               <div className="w-10 sm:w-12 rounded-full">
-                <img
-                  src={imageUrl}
-                  alt={`${userName}'s profile`}
-                  onError={(e) => {
-                    e.target.src = "path/to/default/image.png"; // Fallback image
-                  }}
-                />
+                <img src={imageUrl} alt={`${userName}'s profile`} />
               </div>
             </div>
 

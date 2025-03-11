@@ -10,10 +10,12 @@ const SocketProvider = ({ children }) => {
 
   const [onlineUsers, setOnlineUsers] = useState([]);
 
+  const Socket_URL = "http://localhost:5001";
+
   useEffect(() => {
     if (user?.user?._id) {
       // Initialize the socket connection
-      const socket = io("http://localhost:5002", {
+      const socket = io(Socket_URL, {
         // Change the port number here
         query: {
           userId: user?.user?._id, // Pass the user ID to the server

@@ -2,6 +2,7 @@ const express = require("express");
 const http = require("http");
 const { Server } = require("socket.io");
 const dotenv = require("dotenv");
+const cors = require("cors");
 
 // Load environment variables
 dotenv.config();
@@ -13,8 +14,9 @@ const server = http.createServer(App);
 // Initialize Socket.IO with CORS configuration
 const io = new Server(server, {
   cors: {
-    origin: "*", // Use environment variable for client URL
+    origin: "http://localhost:5173", // Use environment variable for client URL
     methods: ["GET", "POST"],
+    credentials: true,
   },
 });
 
