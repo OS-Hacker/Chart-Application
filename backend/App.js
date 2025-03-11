@@ -9,7 +9,7 @@ dotenv.config();
 
 const { App, server } = require("./SocketIo/server");
 
-const PORT = process.env.PORT || 4002; // Change the port number here
+const PORT = process.env.PORT || 3001; // Change the port number here
 
 // Middleware
 App.use(cors());
