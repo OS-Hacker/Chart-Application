@@ -11,13 +11,18 @@ dotenv.config();
 
 const { App, server } = require("./SocketIo/server");
 
-const PORT = process.env.PORT || 5002;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
-App.use(cors());
+// Enable CORS for all routes
+App.use(cors({
+  origin: "http://localhost:5176", // Allow requests from this origin
+  credentials: true, // Allow cookies and credentials
+}));
 App.use(helmet());
 App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
+
 App.use("/uploads", express.static("uploads"));
 
 // Rate limiting

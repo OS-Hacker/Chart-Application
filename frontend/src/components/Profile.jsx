@@ -4,6 +4,7 @@ import { useAuth } from "../context/AuthProvider";
 const Profile = () => {
   const { user } = useAuth();
 
+
   return (
     <div className="flex flex-col mr-12 items-center md:flex-row md:items-start">
       {/* Profile Image */}

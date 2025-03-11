@@ -17,6 +17,8 @@ const User = ({ users, loading }) => {
     setIsDrawerOpen(false);
   };
 
+  console.log(import.meta.env.VITE_BASE_URL);
+
   if (loading) {
     return (
       <div className="flex justify-center items-center text-sm text-gray-400">
