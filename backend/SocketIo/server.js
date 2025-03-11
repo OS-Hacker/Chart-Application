@@ -13,7 +13,7 @@ const server = http.createServer(App);
 // Initialize Socket.IO with CORS configuration
 const io = new Server(server, {
   cors: {
-    origin: "https://chart-application-k9zz.onrender.com", // Use environment variable for client URL
+    origin: process.env.CLIENT_URL || "*", // Use environment variable for client URL
     methods: ["GET", "POST"],
   },
 });

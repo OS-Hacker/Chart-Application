@@ -13,7 +13,7 @@ const SocketProvider = ({ children }) => {
   useEffect(() => {
     if (user?.user?._id) {
       // Initialize the socket connection
-      const socket = io("https://chart-application-k9zz.onrender.com", {
+      const socket = io("http://localhost:3001", {
         // Change the port number here
         query: {
           userId: user?.user?._id, // Pass the user ID to the server
