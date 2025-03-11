@@ -11,7 +11,7 @@ dotenv.config();
 
 const { App, server } = require("./SocketIo/server");
 
-const PORT = process.env.PORT || 4002;
+const PORT = process.env.PORT || 5001;
 
 // Middleware
 App.use(cors());
@@ -25,6 +25,7 @@ const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
+
 App.use(limiter);
 
 // Database connection
