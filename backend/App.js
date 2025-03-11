@@ -9,7 +9,7 @@ dotenv.config();
 
 const { App, server } = require("./SocketIo/server");
 
-const PORT = process.env.PORT || 3001; // Change the port number here
+const PORT = process.env.PORT || 4002; // Change the port number here
 
 // Middleware
 App.use(cors());
@@ -30,7 +30,7 @@ if (process.env.NODE_ENV === "production") {
   App.use(express.static(path.join(dirPath, "../frontend/dist")));
 
   App.get("*", (req, res) => {
-    res.sendFile(path.join(dirPath, "../frontend", "dist", "index.html"));
+    res.sendFile(path.join(dirPath, "../frontend", "index.html"));
   });
 }
 
