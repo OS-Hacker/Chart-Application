@@ -14,7 +14,14 @@ const { App, server } = require("./SocketIo/server");
 // Middleware
 // Enable CORS for all routes
 App.use(cors());
-App.use(helmet());
+App.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      imgSrc: ["'self'", "data:", "blob:"],
+    },
+  })
+);
+
 App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
 
