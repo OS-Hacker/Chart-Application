@@ -17,7 +17,7 @@ App.use(cors());
 App.use(
   helmet.contentSecurityPolicy({
     directives: {
-      imgSrc: ["'self'", "data:", "blob:"],
+      imgSrc: ["'self'", "data:", "blob:", "https://res.cloudinary.com"],
     },
   })
 );
