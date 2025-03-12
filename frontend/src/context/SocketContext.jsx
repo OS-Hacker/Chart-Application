@@ -10,7 +10,9 @@ const SocketProvider = ({ children }) => {
 
   const [onlineUsers, setOnlineUsers] = useState([]);
 
-  const Socket_URL = "http://localhost:5001";
+  const Socket_URL = "https://chart-application-e9nq.onrender.com";
+  
+  // "http://localhost:5001";
 
   useEffect(() => {
     if (user?.user?._id) {
