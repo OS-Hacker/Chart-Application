@@ -36,12 +36,14 @@ App.use("/api/users", userRoutes);
 App.use("/api/message", messageRoutes);
 
 // Deployment setup
-const dirPath = path.resolve();
+// Serve static files from the frontend build directory
 if (process.env.NODE_ENV === "production") {
-  App.use(express.static(path.join(dirPath, "../frontend/dist")));
+  const frontendBuildPath = path.join(__dirname, "../frontend/build"); // Adjust the path to your frontend build directory
+  App.use(express.static(frontendBuildPath));
 
+  // Handle client-side routing (e.g., React Router)
   App.get("*", (req, res) => {
-    res.sendFile(path.join(dirPath, "../frontend",  "index.html"));
+    res.sendFile(path.join(frontendBuildPath, "index.html"));
   });
 }
 
