@@ -35,16 +35,14 @@ const User = ({ users, loading }) => {
     );
   }
 
+  console.log(users);
+
   return (
     <div className="flex flex-col gap-3 p-3 sm:p-4 max-h-[80vh]">
       {users.map((user) => {
         const { _id, userName, email, profileImage } = user;
         const isSelected = selectedUser?._id === _id;
         const isOnline = onlineUsers.includes(user._id);
-
-        const imageUrl = `${
-          import.meta.env.VITE_BASE_URL
-        }/uploads/${profileImage}`;
 
         return (
           <div
@@ -57,7 +55,7 @@ const User = ({ users, loading }) => {
             {/* Avatar Section */}
             <div className={`avatar ${isOnline ? "avatar-online" : ""}`}>
               <div className="w-10 sm:w-12 rounded-full">
-                <img src={imageUrl} alt={`${userName}'s profile`} />
+                <img src={profileImage} alt={`${userName}'s profile`} />
               </div>
             </div>
 

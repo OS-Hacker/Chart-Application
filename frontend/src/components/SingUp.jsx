@@ -49,6 +49,7 @@ const SignUp = () => {
       formDataToSend.append("profileImage", profileImage);
     }
 
+
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/users/signup`,

@@ -2,7 +2,7 @@ const Conversation = require("../models/Conversation.model");
 const { getReceiverSocketId, io } = require("./../SocketIo/server");
 const messageModel = require("../models/Message.model");
 const { ObjectId } = require("mongoose").Types;
-const cloudinary = require("../lib/cloudinary")
+const cloudinary = require("../lib/cloudinary");
 
 async function SendMessageController(req, res) {
   try {
@@ -31,9 +31,7 @@ async function SendMessageController(req, res) {
     if (req.file) {
       try {
         // Upload the file to Cloudinary
-        const uploadResponse = await cloudinary.uploader.upload(req.file.path, {
-          folder: "chat-app", // Optional: Specify a folder in Cloudinary
-        });
+        const uploadResponse = await cloudinary.uploader.upload(req.file.path);
         imageUrl = uploadResponse.secure_url;
       } catch (error) {
         console.error("Error uploading image to Cloudinary:", error);
@@ -84,7 +82,6 @@ const GetMessageController = async (req, res) => {
       participants: { $all: [senderId, chatUser] },
     }).populate({
       path: "messages",
-      options: { sort: { createdAt: -1 } },
     });
 
     if (!conversation) {

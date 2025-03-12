@@ -30,9 +30,7 @@ const Header = () => {
           >
             <div className="w-10 sm:w-12 md:w-14 lg:w-16 rounded-full">
               <img
-                src={`${import.meta.env.VITE_BASE_URL}/uploads/${
-                  selectedUser?.profileImage
-                }`}
+                src={selectedUser?.profileImage}
                 alt={selectedUser?.userName}
                 className="w-full h-full object-cover"
               />

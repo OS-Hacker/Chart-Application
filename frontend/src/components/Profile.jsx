@@ -4,7 +4,6 @@ import { useAuth } from "../context/AuthProvider";
 const Profile = () => {
   const { user } = useAuth();
 
-
   return (
     <div className="flex flex-col mr-12 items-center md:flex-row md:items-start">
       {/* Profile Image */}
@@ -12,9 +11,7 @@ const Profile = () => {
         <div className="avatar">
           <div className="ring-primary ring-offset-base-100 w-24 lg:ml-14 h-24 rounded-full ring ring-offset-2">
             <img
-              src={`${import.meta.env.VITE_BASE_URL}/uploads/${
-                user?.user?.profileImage
-              }`}
+              src={user?.user?.profileImage}
               alt="User Profile"
               className="w-full h-full rounded-full object-cover "
             />

@@ -9,22 +9,19 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 dotenv.config();
 
-
 const { App, server } = require("./SocketIo/server");
 
 // Middleware
 // Enable CORS for all routes
-App.use(cors())
+App.use(cors());
 App.use(helmet());
 App.use(express.json());
 App.use(express.urlencoded({ extended: true }));
-App.use("/uploads", express.static("uploads"));
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 5000;
 
 // Database connection
 connectDb();
-
 
 // Rate limiting
 const limiter = rateLimit({

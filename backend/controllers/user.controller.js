@@ -1,12 +1,16 @@
 const { heshPass, Token, comparePass } = require("../helper/helpers");
+const cloudinary = require("../lib/cloudinary");
 const BlackListedTokenModel = require("../models/BlackListedTokens.model");
 const messageModel = require("../models/Message.model");
 const userModel = require("../models/user.model");
 
 const SignupUserController = async (req, res) => {
   try {
+    console.log("dkdkd");
     const { userName, email, password } = req.body;
-    const profileImage = req.file ? req.file.filename : null;
+
+    console.log(userName, email, password);
+    console.log(req.file.path);
 
     // Validations
     if (!userName || !email || !password) {
@@ -16,12 +20,10 @@ const SignupUserController = async (req, res) => {
     }
 
     if (password.length < 8) {
-      return res
-        .status(400)
-        .send({
-          success: false,
-          msg: "Password must be at least 8 characters long!",
-        });
+      return res.status(400).send({
+        success: false,
+        msg: "Password must be at least 8 characters long!",
+      });
     }
 
     const emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g;
@@ -42,11 +44,24 @@ const SignupUserController = async (req, res) => {
     // Hash password
     const hashedPassword = await heshPass(password);
 
+    // add profile image in cloudnary
+    let imageUrl;
+    if (req.file) {
+      try {
+        // Upload the file to Cloudinary
+        const uploadResponse = await cloudinary.uploader.upload(req.file.path);
+        imageUrl = uploadResponse.secure_url;
+      } catch (error) {
+        console.error("Error uploading image to Cloudinary:", error.toString());
+        return res.status(500).send({ msg: "Failed to upload image" });
+      }
+    }
+
     // Create new user
     const newUser = await userModel.create({
       userName,
       email,
-      profileImage,
+      profileImage: imageUrl,
       password: hashedPassword,
     });
 
@@ -80,7 +95,7 @@ const LoginUserController = async (req, res) => {
 
     // Check if user exists
     const user = await userModel.findOne({ email });
-    
+
     if (!user) {
       return res.status(401).json({
         success: false,

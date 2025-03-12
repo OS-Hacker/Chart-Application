@@ -50,7 +50,7 @@ const Message = () => {
           <div className="chat-image avatar">
             <div className="w-10 rounded-full">
               <img
-                src={`${import.meta.env.VITE_BASE_URL}/uploads/${profileImage}`}
+                src={profileImage}
                 alt={isCurrentUser ? "Your Profile" : "User Profile"}
                 className="w-full h-full object-cover"
               />
