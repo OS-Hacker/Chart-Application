@@ -9,7 +9,6 @@ const SignupUserController = async (req, res) => {
     console.log("dkdkd");
     const { userName, email, password } = req.body;
 
-    console.log(userName, email, password);
     console.log(req.file.path);
 
     // Validations
@@ -52,7 +51,7 @@ const SignupUserController = async (req, res) => {
         const uploadResponse = await cloudinary.uploader.upload(req.file.path);
         imageUrl = uploadResponse.secure_url;
       } catch (error) {
-        console.error("Error uploading image to Cloudinary:", error.toString());
+        console.error("Error uploading image to Cloudinary:", error);
         return res.status(500).send({ msg: "Failed to upload image" });
       }
     }

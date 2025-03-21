@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthProvider";
 import { BsEyeFill, BsEyeSlash } from "react-icons/bs";
 import imagePic from "../assets/Images/avatar.png";
+import { FaSpinner } from "react-icons/fa"; // Import the spinner icon
 
 const SignUp = () => {
   const [formData, setFormData] = useState({
@@ -49,7 +50,6 @@ const SignUp = () => {
       formDataToSend.append("profileImage", profileImage);
     }
 
-
     try {
       const response = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/api/users/signup`,
@@ -77,29 +77,34 @@ const SignUp = () => {
 
   return (
     <div className="flex justify-center align-center m-auto">
-      <div className="p-7 h-screen flex flex-col justify-center">
+      <div className="p-7 h-screen flex flex-col justify-center w-[400px]">
+        {" "}
+        {/* Increased container width */}
         <form onSubmit={submitHandler}>
           <label htmlFor="profile" className="text-white flex justify-center">
             <div className="avatar">
-              <div className="ring-primary ring-offset-base-100 w-24 rounded-full ring ring-offset-2">
+              <div className="ring-primary ring-offset-base-100 w-24 rounded-full ring ring-offset-2 hover:ring-4 transition-all duration-300">
                 {profileImage ? (
                   <img
                     src={URL.createObjectURL(profileImage)}
                     alt="Profile"
-                    className="cursor-pointer"
+                    className="cursor-pointer rounded-full"
                   />
                 ) : (
                   <div className="relative">
                     <img
                       src={imagePic}
                       alt="Default Profile"
-                      className="cursor-pointer"
+                      className="cursor-pointer rounded-full"
                     />
                   </div>
                 )}
               </div>
             </div>
           </label>
+          <p className="text-center text-sm text-gray-400 mt-2">
+            Click to upload a profile picture
+          </p>
 
           <input
             hidden
@@ -112,7 +117,7 @@ const SignUp = () => {
 
           <h3 className="text-lg w-1/2 font-medium mb-2">What's your name</h3>
           <input
-            className="bg-[#eeeeee] mb-7 text-black rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base"
+            className="bg-[#eeeeee] mb-7 text-black rounded-lg px-3 py-2 border w-full text-xl placeholder:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
             value={formData.userName}
             name="userName"
             onChange={handleChange}
@@ -125,7 +130,7 @@ const SignUp = () => {
             value={formData.email}
             name="email"
             onChange={handleChange}
-            className="bg-[#eeeeee] mb-7 text-black rounded-lg px-4 py-2 border w-full text-lg placeholder:text-base"
+            className="bg-[#eeeeee] mb-7 text-black rounded-lg px-3 py-2  border w-full text-xl placeholder:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
             type="email"
             placeholder="email@example.com"
           />
@@ -133,7 +138,7 @@ const SignUp = () => {
           <h3 className="text-lg font-medium mb-2">Enter Password</h3>
           <label className="relative">
             <input
-              className="bg-[#eeeeee] mb-7 text-black w-full rounded-lg px-4 py-2 border text-lg placeholder:text-base relative"
+              className="bg-[#eeeeee] mb-7 text-black w-full rounded-lg px-3 py-2  border text-xl placeholder:text-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
               type={togglePassword ? "text" : "password"}
               placeholder="Password"
               value={formData.password}
@@ -141,7 +146,7 @@ const SignUp = () => {
               onChange={handleChange}
             />
             <span
-              className="absolute right-5 top-1 text-black cursor-pointer text-lg"
+              className="absolute right-5 top-0 text-black cursor-pointer text-xl"
               onClick={() => setTogglPassword((prev) => !prev)}
               aria-label={togglePassword ? "Hide password" : "Show password"}
             >
@@ -151,16 +156,21 @@ const SignUp = () => {
 
           <button
             type="submit"
-            className="bg-[#111] text-white font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base cursor-pointer"
+            className="bg-[#111] text-white font-semibold mb-3 rounded-lg px-6 py-2  w-full text-xl placeholder:text-lg cursor-pointer hover:bg-[#333] transition-all duration-300 flex items-center justify-center"
             disabled={loading}
           >
-            {loading ? "Loading..." : "Create account"}
+            {loading ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" /> Creating account...
+              </>
+            ) : (
+              "Create account"
+            )}
           </button>
         </form>
-
         <p className="text-center">
           Already have an account?
-          <Link to="/login" className="text-blue-600">
+          <Link to="/login" className="text-blue-600 hover:text-blue-800">
             {"  "} Login here
           </Link>
         </p>

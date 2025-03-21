@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useAuth } from "../context/AuthProvider";
+import { FaSpinner } from "react-icons/fa"; // Import the spinner icon
 import { MessageSquare } from "lucide-react";
 
 const Login = () => {
@@ -68,7 +69,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center align-center w-full mt-48">
+    <div className="p-7 h-screen flex flex-col justify-center w-[400px] m-auto">
       <div>
         <div
           className="w-16 h-16 rounded-2xl m-auto mb-4 bg-primary/10 flex items-center
@@ -101,10 +102,16 @@ const Login = () => {
 
           <button
             type="submit"
-            disabled={loading} // Disable button when loading
-            className="bg-[#111] text-white cursor-pointer font-semibold mb-3 rounded-lg px-4 py-2 w-full text-lg placeholder:text-base disabled:opacity-50 disabled:cursor-not-allowed"
+            className="bg-[#111] text-white font-semibold mb-3 rounded-lg px-6 py-2  w-full text-xl placeholder:text-lg cursor-pointer hover:bg-[#333] transition-all duration-300 flex items-center justify-center"
+            disabled={loading}
           >
-            {loading ? "Loading..." : "Login"}
+            {loading ? (
+              <>
+                <FaSpinner className="animate-spin mr-2" /> Logging in...
+              </>
+            ) : (
+              "Login"
+            )}
           </button>
         </form>
 
