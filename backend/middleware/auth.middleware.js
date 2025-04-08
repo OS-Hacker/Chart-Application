@@ -1,5 +1,5 @@
 const JWT = require("jsonwebtoken"); // Make sure you require jsonwebtoken
-const BlackListedTokenModel = require("../models/BlackListedTokens.model");
+// const BlackListedTokenModel = require("../models/BlackListedTokens.model");
 
 const authUser = async (req, res, next) => {
   try {
@@ -18,11 +18,11 @@ const authUser = async (req, res, next) => {
     }
 
     // check it is blackListed token or not
-    const isBlackListedToken = await BlackListedTokenModel.findOne({ token });
+    // const isBlackListedToken = await BlackListedTokenModel.findOne({ token });
 
-    if (isBlackListedToken) {
-      return res.status(401).send({ msg: "Unauthorized - BlackListed Token" });
-    }
+    // if (isBlackListedToken) {
+    //   return res.status(401).send({ msg: "Unauthorized - BlackListed Token" });
+    // }
 
     // Verify token
     const decode = await JWT.verify(token, process.env.JWT_SECRET);

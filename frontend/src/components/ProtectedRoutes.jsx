@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 
 const ProtectedRoutes = () => {
-  const {user} = useAuth();
+  const { user } = useAuth();
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(true); // Add a loading state
   const navigate = useNavigate();
