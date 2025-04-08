@@ -37,7 +37,7 @@ const App = () => {
                     <div className="drawer-content flex flex-col items-center justify-start h-full overflow-hidden">
                       <Right />
                     </div>
-                    {/* Sidebar */} 
+                    {/* Sidebar */}
                     <div className="drawer-side">
                       <label
                         htmlFor="my-drawer-2"

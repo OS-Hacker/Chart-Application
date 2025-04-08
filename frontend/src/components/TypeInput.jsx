@@ -1,4 +1,4 @@
-import { Image, Send, X } from "lucide-react";
+import { Image, Send, X, Mic } from "lucide-react";
 import { useCallback, useMemo } from "react";
 
 const TypeInput = ({
@@ -44,23 +44,24 @@ const TypeInput = ({
   }, [setImagePreview, fileInputRef]);
 
   const isSubmitDisabled = useMemo(
-    () => !message.trim() || !imagePreview,
+    () => !message.trim() && !imagePreview,
     [message, imagePreview]
   );
 
   return (
-    <div className="fixed bottom-0 w-full sm:p-2">
+    <div className="fixed bottom-0 left-0 lg:left-90 right-0">
+      {/* Image Preview */}
       {imagePreview && (
-        <div className="mb-3 flex flex-wrap justify-center sm:justify-start">
-          <div className="relative max-w-[150px] sm:max-w-[100px]">
+        <div className="px-2 pt-2">
+          <div className="relative inline-block">
             <img
               src={URL.createObjectURL(imagePreview)}
               alt="Preview"
-              className="w-full max-h-[150px] object-cover rounded-lg border border-zinc-700"
+              className="w-[100px] h-[100px] object-cover rounded-lg border border-gray-300 dark:border-gray-600"
             />
             <button
               onClick={removeImage}
-              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center"
+              className="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white flex items-center justify-center shadow-sm"
               type="button"
               aria-label="Remove image"
             >
@@ -72,13 +73,43 @@ const TypeInput = ({
 
       <form
         onSubmit={submitHandler}
-        className="flex flex-wrap items-center gap-2"
+        className="flex items-center gap-2 w-full p-2"
       >
-        <div className="flex gap-3 min-w-9/12">
-          {/* Input Field */}
+        {/* Emoji Button */}
+        <button
+          type="button"
+          className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+          aria-label="Emoji"
+        >
+          <span className="text-xl">😊</span>
+        </button>
+
+        {/* Attachment Button */}
+        <label
+          htmlFor="file-input"
+          className={`p-2 rounded-full ${
+            imagePreview
+              ? "text-green-500"
+              : "text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+          }`}
+          aria-label="Upload image"
+        >
+          <Image className="w-5 h-5" />
+        </label>
+        <input
+          id="file-input"
+          type="file"
+          accept="image/*"
+          className="hidden"
+          ref={fileInputRef}
+          onChange={handleImageChange}
+        />
+
+        {/* Message Input */}
+        <div className="flex-1">
           <input
             type="text"
-            className="flex-1 w-3xl input input-bordered rounded-lg input-sm sm:input-md"
+            className="w-full py-2 px-4 bg-gray-100 dark:bg-neutral-700 rounded-full border-none focus:outline-none "
             placeholder="Type a message..."
             autoFocus
             value={message}
@@ -86,51 +117,32 @@ const TypeInput = ({
             onKeyDown={handleKeyDown}
             aria-label="Type a message"
           />
+        </div>
 
-          {/* Clear Message Button */}
-          {message && (
+        {/* Send/Voice Message Button */}
+        <div className="ml-2">
+          {message.trim() || imagePreview ? (
+            <button
+              type="submit"
+              className="w-9 h-9 p-2 rounded-full bg-gray-500 text-white disabled:opacity-50 flex items-center justify-center"
+              disabled={isSubmitDisabled || loading}
+              aria-label="Send message"
+            >
+              {loading ? (
+                <span className="loading loading-spinner loading-sm"></span>
+              ) : (
+                <Send className="w-5 h-5" />
+              )}
+            </button>
+          ) : (
             <button
               type="button"
-              className="btn btn-circle btn-sm sm:btn-md"
-              onClick={() => setMessage("")}
-              aria-label="Clear message"
+              className="p-2 rounded-full text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+              aria-label="Voice message"
             >
-              <X className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Mic className="w-5 h-5" />
             </button>
           )}
-
-          {/* Upload Image Button */}
-          <label
-            htmlFor="file-input"
-            className={`btn btn-circle btn-sm sm:btn-md ${
-              imagePreview ? "text-emerald-500" : "text-gray-400"
-            }`}
-            aria-label="Upload image"
-          >
-            <Image className="w-4 h-4 sm:w-5 sm:h-5" />
-          </label>
-          <input
-            id="file-input"
-            type="file"
-            accept="image/*"
-            className="hidden"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-          />
-
-          {/* Send Message Button */}
-          <button
-            type="submit"
-            className="btn btn-circle btn-sm sm:btn-md"
-            disabled={isSubmitDisabled}
-            aria-label="Send message"
-          >
-            {loading && (message.trim() || imagePreview) ? (
-              <span className="loading loading-spinner text-primary"></span>
-            ) : (
-              <Send className="w-4 h-4 sm:w-5 sm:h-5" />
-            )}
-          </button>
         </div>
       </form>
     </div>

@@ -131,9 +131,9 @@ const Left = () => {
               <Profile />
             </div>
           </div>
-            <form method="dialog" className="">
-              <button className="btn">Close</button>
-            </form>
+          <form method="dialog" className="">
+            <button className="btn">Close</button>
+          </form>
         </div>
       </dialog>
     </div>
