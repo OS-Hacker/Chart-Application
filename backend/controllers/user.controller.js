@@ -4,9 +4,10 @@ const BlackListedTokenModel = require("../models/BlackListedTokens.model");
 const messageModel = require("../models/Message.model");
 const userModel = require("../models/user.model");
 
+// SINGUP USER
 const SignupUserController = async (req, res) => {
   try {
-    console.log("dkdkd");
+
     const { userName, email, password } = req.body;
 
     console.log(req.file.path);
@@ -83,6 +84,7 @@ const SignupUserController = async (req, res) => {
   }
 };
 
+// LOGIN USER
 const LoginUserController = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -136,6 +138,7 @@ const LoginUserController = async (req, res) => {
   }
 };
 
+// GET USER
 const GetAllUserController = async (req, res) => {
   try {
     const loggedInUser = req.user?._id;
@@ -185,6 +188,7 @@ const GetAllUserController = async (req, res) => {
   }
 };
 
+// USER SEARCH
 const UserSearchController = async (req, res) => {
   try {
     const { search } = req.query;
@@ -212,6 +216,7 @@ const UserSearchController = async (req, res) => {
   }
 };
 
+// USER LOGOUT
 const LogoutUserController = async (req, res) => {
   try {
     // Extract token from headers
@@ -252,7 +257,7 @@ const LogoutUserController = async (req, res) => {
   }
 };
 
-// protect user
+// PROTECT USER
 const ProtectUserController = async (req, res) => {
   try {
     await res.status(200).send({ ok: true });

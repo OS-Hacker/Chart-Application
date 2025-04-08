@@ -28,6 +28,7 @@ async function SendMessageController(req, res) {
     }
 
     let imageUrl;
+
     if (req.file) {
       try {
         // Upload the file to Cloudinary
