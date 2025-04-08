@@ -39,7 +39,7 @@ const Logout = () => {
   return (
     <LuLogOut
       onClick={handleLogout}
-      className="font-bold text-2xl cursor-pointer hover:text-red-600 absolute bottom-8"
+      className="font-bold text-2xl cursor-pointer hover:text-red-600 absolute bottom-8 left-4"
     />
   );
 };

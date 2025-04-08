@@ -38,7 +38,7 @@ const User = ({ users, loading }) => {
   console.log(users);
 
   return (
-    <div className="flex flex-col gap-3 p-3 sm:p-4 max-h-[80vh]">
+    <div className="flex flex-col gap-1 max-h-[80vh] mt-1">
       {users.map((user) => {
         const { _id, userName, email, profileImage } = user;
         const isSelected = selectedUser?._id === _id;
@@ -46,7 +46,7 @@ const User = ({ users, loading }) => {
 
         return (
           <div
-            className={`flex items-center gap-3 p-3 rounded-lg cursor-pointer transition-all duration-200 ${
+            className={`flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-all duration-200 ${
               isSelected ? "bg-gray-800" : "hover:bg-zinc-800"
             }`}
             key={_id}
@@ -61,10 +61,10 @@ const User = ({ users, loading }) => {
 
             {/* User Info */}
             <div className="flex flex-col">
-              <h1 className="text-sm sm:text-base lg:text-lg font-semibold text-white">
+              <h1 className="text-sm sm:text-base lg:text-[16px] font-semibold text-white">
                 {userName}
               </h1>
-              <h4 className="text-xs sm:text-sm lg:text-base text-gray-400">
+              <h4 className="text-xs sm:text-sm lg:text-sm text-gray-400 ">
                 {email}
               </h4>
             </div>

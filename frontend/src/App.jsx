@@ -12,7 +12,7 @@ const App = () => {
   const { user, isDrawerOpen, setIsDrawerOpen } = useAuth(); // Get the user from the AuthProvider context
 
   return (
-    <div className="flex">
+    <div className="flex m-0 p-0">
       {/* Define routes */}
       <Routes>
         {/* Protected routes */}
@@ -42,7 +42,7 @@ const App = () => {
                       <label
                         htmlFor="my-drawer-2"
                         aria-label="close sidebar"
-                        className="drawer-overlay"
+                        className="drawer-overlay overflow-hidden"
                       ></label>
                       <ul className="menu w-90 sm:w-92 text-base-content h-screen">
                         <Left />
@@ -73,3 +73,5 @@ const App = () => {
 };
 
 export default App;
+
+

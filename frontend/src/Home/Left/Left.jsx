@@ -90,11 +90,11 @@ const Left = () => {
 
   return (
     <div
-      className="w-full text-white px-5 h-screen"
+      className="w-full text-white px-7 h-screen"
       style={{ backgroundColor: "#191E24" }}
     >
       {/* Header Section */}
-      <div className="flex justify-between align-center mt-4 mb-4">
+      <div className="flex justify-between align-center mt-3">
         <h3 className="text-xl font-bold">Chat</h3>
         <div className="icon mt-2 text-lg cursor-pointer hover:text-green-500">
           <FiEdit

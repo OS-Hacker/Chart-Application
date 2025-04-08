@@ -17,7 +17,7 @@ const Header = () => {
 
   return (
     <div
-      className="h-20 w-full border-b border-black fixed z-10"
+      className="h-16 w-full border-black fixed z-10"
       style={{ backgroundColor: "#191E24" }}
     >
       <div className="flex items-center justify-between px-4 sm:px-6 lg:px-8 py-3 h-full">
@@ -28,7 +28,7 @@ const Header = () => {
               isUserOnline(selectedUser?._id) ? "avatar-online" : ""
             }`}
           >
-            <div className="w-10 sm:w-12 md:w-14 lg:w-16 rounded-full">
+            <div className="w-10 sm:w-12 md:w-14 lg:w-13 rounded-full">
               <img
                 src={selectedUser?.profileImage}
                 alt={selectedUser?.userName}
@@ -37,10 +37,10 @@ const Header = () => {
             </div>
           </div>
           <div>
-            <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white">
+            <h1 className="text-sm sm:text-base md:text-lg lg:text-[17px] font-semibold text-white">
               {selectedUser?.userName || "No User Selected"}
             </h1>
-            <h4 className="text-xs sm:text-sm md:text-base text-gray-400">
+            <h4 className="text-xs sm:text-sm md:text-sm text-gray-400">
               {isUserOnline(selectedUser?._id) ? "Online" : "Offline"}
             </h4>
           </div>
@@ -49,7 +49,7 @@ const Header = () => {
         {/* Right Section: Drawer Toggle (Visible on Mobile) */}
         <div className="lg:hidden">
           <AlignJustify
-            className="w-6 h-6 sm:w-8 sm:h-8 text-primary cursor-pointer"
+            className="w-6 h-6 sm:w-8 sm:h-8 cursor-pointer"
             onClick={() => setIsDrawerOpen(!isDrawerOpen)}
           />
         </div>

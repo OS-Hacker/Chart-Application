@@ -64,11 +64,20 @@ const Message = () => {
           </div>
           <div className="chat-bubble flex flex-col">
             {messageImage && (
-              <img src={messageImage} alt="Attachment" className="w-auto h-30 p-0" />
+              <img
+                src={messageImage}
+                alt="Attachment"
+                className="w-60 h-auto max-h-60 object-contain rounded-lg"
+                loading="lazy"
+              />
             )}
-            {messageImage && <div className="chat-bubble p-0">{messageText}</div>}
+            {messageImage && (
+              <div className="chat-bubble p-0 text-sm">{messageText}</div>
+            )}
           </div>
-          {!messageImage && <div className="chat-bubble">{messageText}</div>}
+          {!messageImage && (
+            <div className="chat-bubble text-sm">{messageText}</div>
+          )}
           <div className="chat-footer opacity-50">
             {isCurrentUser ? "Delivered" : "Seen"}
           </div>
@@ -78,7 +87,7 @@ const Message = () => {
   }, [messages, selectedUser, user]);
 
   return (
-    <div className="p-4 sm:p-10 mt-15 h-full">
+    <div className="p-4 sm:p-10 mt-12 h-full">
       <div className="overflow-y-auto h-full">
         {renderedMessages}
         <div ref={lastMsgRef} /> {/* Invisible element for scrolling */}
