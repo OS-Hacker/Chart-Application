@@ -114,10 +114,7 @@ const Left = () => {
         )}
       </div>
 
-      {/* Logout Section */}
-      <div className="">
-        <Logout />
-      </div>
+  
     </div>
   );
 };

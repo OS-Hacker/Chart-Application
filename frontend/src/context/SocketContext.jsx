@@ -37,8 +37,6 @@ const SocketProvider = ({ children }) => {
     }
   }, [user?.user?._id]); // Re-run effect when user ID changes
 
-  console.log(socket);
-
   return (
     <SocketContext.Provider value={{ socket, onlineUsers }}>
       {children}

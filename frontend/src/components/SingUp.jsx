@@ -156,7 +156,7 @@ const SignUp = () => {
 
           <button
             type="submit"
-            className="bg-[#111] text-white font-semibold mb-3 rounded-lg px-6 py-2  w-full text-xl placeholder:text-lg cursor-pointer hover:bg-[#333] transition-all duration-300 flex items-center justify-center"
+            className="bg-[#151515] text-white font-semibold mb-3 rounded-lg px-6 py-2  w-full text-xl placeholder:text-lg cursor-pointer  transition-all duration-300 flex items-center justify-center"
             disabled={loading}
           >
             {loading ? (

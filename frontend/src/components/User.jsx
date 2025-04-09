@@ -13,11 +13,8 @@ const User = ({ users, loading }) => {
     if (selectedUser) {
       setSelectedUser(selectedUser);
     }
-
     setIsDrawerOpen(false);
   };
-
-  console.log(import.meta.env.VITE_BASE_URL);
 
   if (loading) {
     return (
@@ -34,8 +31,6 @@ const User = ({ users, loading }) => {
       </div>
     );
   }
-
-  console.log(users);
 
   return (
     <div className="flex flex-col gap-1 max-h-[80vh] mt-1">

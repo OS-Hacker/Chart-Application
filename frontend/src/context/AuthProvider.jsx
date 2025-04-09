@@ -1,5 +1,6 @@
 import axios from "axios";
 import { createContext, useContext, useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const AuthContext = createContext();
@@ -39,6 +40,7 @@ const AuthProvider = ({ children }) => {
       delete axios.defaults.headers.common["Authorization"];
       setIsProfileModalOpen(false); // Close modal on logout
       toast.success("Logout Successfull!");
+      <Navigate to="/login" />;
     } catch (error) {
       console.error("Error during logout:", error);
     }
@@ -66,39 +68,6 @@ const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateProfile = async (profileData) => {
-    try {
-      const response = await axios.put(
-        `${import.meta.env.VITE_BASE_URL}/api/users/update`,
-        profileData,
-        {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
-
-      if (response.data) {
-        const updatedUser = {
-          ...user,
-          user: {
-            ...user.user,
-            ...response.data.updatedUser,
-          },
-        };
-        setUser(updatedUser);
-        localStorage.setItem("user", JSON.stringify(updatedUser));
-        return { success: true };
-      }
-    } catch (error) {
-      console.error("Profile update error:", error);
-      return {
-        success: false,
-        error: error.response?.data?.message || "Profile update failed",
-      };
-    }
-  };
-
   // Drawer state management
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
@@ -109,7 +78,6 @@ const AuthProvider = ({ children }) => {
         setUser,
         logout,
         login,
-        updateProfile,
         isProfileModalOpen,
         setIsProfileModalOpen,
         setIsDrawerOpen,
