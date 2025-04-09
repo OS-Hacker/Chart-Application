@@ -7,7 +7,6 @@ const ProfileModal = () => {
     user,
     isProfileModalOpen,
     setIsProfileModalOpen,
-    updateProfile,
     logout,
   } = useAuth();
 
@@ -62,9 +61,7 @@ const ProfileModal = () => {
           profileImage: newProfileImage,
         });
 
-        // Update context
-        await updateProfile({ profileImage: newProfileImage });
-
+     
         // Update local storage
         const userData = JSON.parse(localStorage.getItem("user"));
         if (userData) {
