@@ -1,7 +1,6 @@
 import { useAuth } from "../context/AuthProvider";
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { FiEdit } from "react-icons/fi";
 
 const ProfileModal = () => {
   const {
@@ -16,13 +15,10 @@ const ProfileModal = () => {
     profileImage: "",
   });
   const [loading, setLoading] = useState({
-    profile: false,
     image: false,
   });
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [isEditingName, setIsEditingName] = useState(false);
-  const nameInputRef = useRef(null);
 
   // Initialize form data when modal opens
   useEffect(() => {
@@ -42,14 +38,14 @@ const ProfileModal = () => {
     setSuccess(null);
 
     try {
-      const formData = new FormData();
-      formData.append("profileImage", file);
+      const uploadData = new FormData();
+      uploadData.append("profileImage", file);
 
       const res = await axios.put(
         `${import.meta.env.VITE_BASE_URL}/api/users/upload-image/${
           user?.user?._id
         }`,
-        formData,
+        uploadData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -58,14 +54,13 @@ const ProfileModal = () => {
         }
       );
 
-      if (res?.data?.success) {
+      if (res.data?.success) {
         const newProfileImage = res.data.profileImage;
 
         // Update form data
-        setFormData((prev) => ({
-          ...prev,
+        setFormData({
           profileImage: newProfileImage,
-        }));
+        });
 
         // Update context
         await updateProfile({ profileImage: newProfileImage });
@@ -83,10 +78,8 @@ const ProfileModal = () => {
     } catch (err) {
       console.error("Image upload error:", err);
       setError(
-        err.response?.data?.msg ||
-          err.response?.data?.message ||
-          err.message ||
-          "Failed to upload image"
+        err.response?.data?.message ||
+          "Failed to upload image. Please try again."
       );
     } finally {
       setLoading((prev) => ({ ...prev, image: false }));
@@ -99,16 +92,14 @@ const ProfileModal = () => {
     <div className="fixed inset-0 z-50 overflow-y-auto">
       <div className="flex items-center justify-center min-h-screen">
         <div
-          className="fixed inset-0 bg-opacity-100 transition-opacity"
-          onClick={() =>
-            !loading.image && !loading.profile && setIsProfileModalOpen(false)
-          }
+          className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
+          onClick={() => !loading.image && setIsProfileModalOpen(false)}
         />
 
         <div className="relative bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-auto p-6">
           <button
             onClick={() => setIsProfileModalOpen(false)}
-            disabled={loading.image || loading.profile}
+            disabled={loading.image}
             className="absolute top-4 right-4 text-gray-400 hover:text-white disabled:opacity-50"
           >
             ✕
@@ -119,17 +110,15 @@ const ProfileModal = () => {
           {user ? (
             <div className="space-y-6">
               <div className="flex flex-col items-center">
-                {/* Profile Image Upload */}
                 <div className="relative mb-4 w-full text-center">
                   <label
                     htmlFor="profileImageInput"
                     className="cursor-pointer relative inline-block"
-                    disabled={loading.image}
                   >
                     <img
                       src={
-                        formData?.profileImage ||
-                        user?.user?.profileImage ||
+                        formData.profileImage ||
+                        user.user.profileImage ||
                         "/default-profile.png"
                       }
                       alt="Profile"
@@ -154,17 +143,12 @@ const ProfileModal = () => {
                   </p>
                 </div>
 
-                {/* Profile Info */}
                 <div className="text-center w-full">
-                  <div className="flex items-center justify-center gap-2">
-                    <h2 className="text-xl font-bold ">
-                      {user?.user?.userName}
-                    </h2>
-                  </div>
+                  <h2 className="text-xl font-bold text-white">
+                    {user.user.userName}
+                  </h2>
+                  <p className="text-gray-400">{user.user.email}</p>
 
-                  <p className="text-gray-400">{user?.user?.email}</p>
-
-                  {/* Status Messages */}
                   {error && (
                     <p className="text-red-400 text-sm mt-2">{error}</p>
                   )}
@@ -172,14 +156,13 @@ const ProfileModal = () => {
                     <p className="text-green-400 text-sm mt-2">{success}</p>
                   )}
 
-                  {/* Logout Button */}
                   <div className="mt-6">
                     <button
                       onClick={logout}
-                      disabled={loading.image || loading.profile}
-                      className="px-2 py-1 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={loading.image}
+                      className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      {loading.profile ? "Processing..." : "Logout"}
+                      Logout
                     </button>
                   </div>
                 </div>
