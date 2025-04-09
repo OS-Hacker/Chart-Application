@@ -6,16 +6,15 @@ import { useAuth } from "../../context/AuthProvider";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUserStore } from "../../context/UserContext";
-import Profile from "../../components/Profile";
 import { useSocket } from "../../context/SocketContext";
-import { AlignJustify } from "lucide-react";
+import ProfileModal from "../../components/ProfileModal";
 
 const Left = () => {
   const { users, setUsers, messages } = useUserStore(); // Remove `messages` if not needed
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null); // State to handle errors
   const [search, setSearch] = useState("");
-  const { user } = useAuth();
+  const { user, setIsProfileModalOpen } = useAuth();
   const { onlineUsers, socket } = useSocket();
 
   // Fetch all users
@@ -97,14 +96,12 @@ const Left = () => {
       <div className="flex justify-between align-center mt-3">
         <h3 className="text-xl font-bold">Chat</h3>
         <div className="icon mt-2 text-lg cursor-pointer hover:text-green-500">
-          <FiEdit
-            onClick={() => document.getElementById("my_modal_1").showModal()}
-          />
+          <FiEdit onClick={() => setIsProfileModalOpen(true)} />
         </div>
       </div>
 
       {/* Search Bar */}
-      <div className="">
+      <div className="mb-1">
         <Search search={search} setSearch={setSearch} />
       </div>
 
@@ -121,21 +118,6 @@ const Left = () => {
       <div className="">
         <Logout />
       </div>
-
-      {/* Profile Modal */}
-      <dialog id="my_modal_1" className="modal">
-        <div className="modal-box">
-          <h3 className="font-bold text-lg lg:ml-60">Profile</h3>
-          <div className="modal-action">
-            <div className="">
-              <Profile />
-            </div>
-          </div>
-          <form method="dialog" className="">
-            <button className="btn">Close</button>
-          </form>
-        </div>
-      </dialog>
     </div>
   );
 };

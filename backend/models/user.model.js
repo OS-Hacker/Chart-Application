@@ -12,6 +12,10 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowerCase: true,
     },
+    cloudinary_id: {
+      type: String,
+      required: true,
+    },
     profileImage: {
       type: String,
     },

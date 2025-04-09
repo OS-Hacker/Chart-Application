@@ -3,6 +3,7 @@ import Header from "../../components/Header";
 import Chart from "../../components/Chart";
 import { useUserStore } from "../../context/UserContext";
 import NoChatSelected from "../../components/NoChartSelected";
+import ProfileModal from "../../components/ProfileModal";
 
 const Right = () => {
   const { selectedUser } = useUserStore(); // Get messages and selected user from context
@@ -24,6 +25,9 @@ const Right = () => {
           </div>
         )}
       </div>
+
+      {/* Profile Modal */}
+      <ProfileModal />
     </>
   );
 };

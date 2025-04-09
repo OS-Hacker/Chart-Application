@@ -55,7 +55,7 @@ const Messages = () => {
       ) : messages?.length > 0 ? (
         <Message /> // Render messages
       ) : (
-        <div className="text-center p-4 text-gray-500 mt-96">
+        <div className="text-center p-4 text-gray-500 mt-70">
           No messages yet. Start a conversation!
         </div> // Show empty state
       )}

@@ -8,7 +8,7 @@ const authUser = async (req, res, next) => {
       return res.status(401).send({ msg: "Unauthorized - No token provided" });
     }
 
-    const token = req.headers.authorization.split(" ")[1]; // ["bearer", "token"]
+    const token = req.headers.authorization.split(" ")[1]; // ["Bearer", "token"]
 
     // Check if token is provided
     if (!token) {

@@ -7,7 +7,6 @@ const userModel = require("../models/user.model");
 // SINGUP USER
 const SignupUserController = async (req, res) => {
   try {
-
     const { userName, email, password } = req.body;
 
     console.log(req.file.path);
@@ -63,6 +62,7 @@ const SignupUserController = async (req, res) => {
       email,
       profileImage: imageUrl,
       password: hashedPassword,
+      cloudinary_id: uploadResponse.public_id,
     });
 
     // Generate token
@@ -97,16 +97,10 @@ const LoginUserController = async (req, res) => {
     // Check if user exists
     const user = await userModel.findOne({ email });
 
-    if (!user) {
-      return res.status(401).json({
-        success: false,
-        msg: "Invalid email or password",
-      });
-    }
-
     // Compare passwords
     const isPasswordValid = await comparePass(password, user.password);
-    if (!isPasswordValid) {
+
+    if (!isPasswordValid || !user) {
       return res.status(401).json({
         success: false,
         msg: "Invalid email or password",
@@ -216,6 +210,89 @@ const UserSearchController = async (req, res) => {
   }
 };
 
+// Update USER PROFILE
+const EditUserProfileController = async (req, res) => {
+  try {
+    const existingUser = await userModel.findById(req.params.id);
+
+    console.log(existingUser);
+
+    if (!existingUser) {
+      return res.status(404).json({ success: false, msg: "User not found" });
+    }
+
+    // If there's an existing cloudinary image, delete it first
+    if (existingUser.cloudinary_id) {
+      await cloudinary.uploader.destroy(existingUser.cloudinary_id);
+    }
+
+    // Upload new image to cloudinary
+    const result = await cloudinary.uploader.upload(req.file.path);
+
+    const updateData = {
+      cloudinary_id: result.public_id,
+      profileImage: result.secure_url, // using secure_url is recommended
+    };
+
+    const updatedUser = await userModel
+      .findByIdAndUpdate(req.params.id, updateData, { new: true })
+      .select("-password");
+
+    res.status(200).json({
+      success: true,
+      msg: "Profile image updated",
+      profileImage: updatedUser.profileImage,
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      success: false,
+      msg: "Error updating profile image",
+      error: error.message,
+    });
+  }
+};
+
+const EditUserNameController = async (req, res) => {
+  try {
+    const { userName } = req.body;
+    const userId = req.user._id;
+
+    if (!userName) {
+      return res.status(400).json({
+        success: false,
+        message: "Username is required",
+      });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      { userName },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Username updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error("Error updating username:", error);
+    res.status(500).json({
+      success: false,
+      message: error.message || "Failed to update username",
+    });
+  }
+};
+
 // USER LOGOUT
 const LogoutUserController = async (req, res) => {
   try {
@@ -273,4 +350,6 @@ module.exports = {
   UserSearchController,
   LogoutUserController,
   ProtectUserController,
+  EditUserProfileController,
+  EditUserNameController,
 };
