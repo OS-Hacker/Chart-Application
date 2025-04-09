@@ -45,11 +45,15 @@ const SignupUserController = async (req, res) => {
 
     // add profile image in cloudnary
     let imageUrl;
+    let cloudinaryId;
+
+
     if (req.file) {
       try {
         // Upload the file to Cloudinary
         const uploadResponse = await cloudinary.uploader.upload(req.file.path);
         imageUrl = uploadResponse.secure_url;
+        cloudinaryId = uploadResponse.public_id;
       } catch (error) {
         console.error("Error uploading image to Cloudinary:", error);
         return res.status(500).send({ msg: "Failed to upload image" });
@@ -62,7 +66,7 @@ const SignupUserController = async (req, res) => {
       email,
       profileImage: imageUrl,
       password: hashedPassword,
-      cloudinary_id: uploadResponse.public_id,
+      cloudinary_id: cloudinaryId,
     });
 
     // Generate token
