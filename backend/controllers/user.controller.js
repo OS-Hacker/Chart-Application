@@ -215,8 +215,6 @@ const EditUserProfileController = async (req, res) => {
   try {
     const existingUser = await userModel.findById(req.params.id);
 
-    console.log(existingUser);
-
     if (!existingUser) {
       return res.status(404).json({ success: false, msg: "User not found" });
     }
