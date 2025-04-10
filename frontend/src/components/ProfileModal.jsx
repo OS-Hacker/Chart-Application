@@ -3,12 +3,8 @@ import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 
 const ProfileModal = () => {
-  const {
-    user,
-    isProfileModalOpen,
-    setIsProfileModalOpen,
-    logout,
-  } = useAuth();
+  const { user, setUser, isProfileModalOpen, setIsProfileModalOpen, logout } =
+    useAuth();
 
   const [formData, setFormData] = useState({
     profileImage: "",
@@ -61,7 +57,15 @@ const ProfileModal = () => {
           profileImage: newProfileImage,
         });
 
-     
+        // update context
+        setUser((prev) => ({
+          ...prev,
+          user: {
+            ...prev.user,
+            profileImage: newProfileImage,
+          },
+        }));
+
         // Update local storage
         const userData = JSON.parse(localStorage.getItem("user"));
         if (userData) {
