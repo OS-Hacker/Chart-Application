@@ -7,7 +7,7 @@ const NoChatSelected = () => {
     <div className="w-full flex flex-1 flex-col items-center justify-center p-16 bg-base-100/50 mt-50 relative">
       {!isDrawerOpen && (
         <AlignJustify
-          className="w-8 h-8 sm:w-8 sm:h-8 text-primary  absolute bottom-115 left-5 cursor-pointer lg:hidden"
+          className="w-8 h-8 sm:w-8 sm:h-8 absolute bottom-115 left-5 cursor-pointer lg:hidden"
           onClick={() => setIsDrawerOpen(!isDrawerOpen)}
         />
       )}
