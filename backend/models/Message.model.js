@@ -21,6 +21,11 @@ const messageSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+
+    // delete message
+    deleted: { type: Boolean, default: false },
+    deletedForEveryone: { type: Boolean, default: false },
+    deletedFor: [{ type: mongoose.Schema.Types.ObjectId, ref: "user" }],
   },
   { timestamps: true } // Enable automatic `createdAt` and `updatedAt` fields
 );

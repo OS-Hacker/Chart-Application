@@ -1,5 +1,5 @@
 import { useAuth } from "../context/AuthProvider";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 const ProfileModal = () => {
@@ -9,9 +9,11 @@ const ProfileModal = () => {
   const [formData, setFormData] = useState({
     profileImage: "",
   });
+
   const [loading, setLoading] = useState({
     image: false,
   });
+  
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -94,13 +96,13 @@ const ProfileModal = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div
           className="fixed inset-0 bg-black bg-opacity-50 transition-opacity"
-          onClick={() => !loading.image && setIsProfileModalOpen(false)}
+          onClick={() => !loading?.image && setIsProfileModalOpen(false)}
         />
 
         <div className="relative bg-gray-800 rounded-lg shadow-xl w-full max-w-md mx-auto p-6">
           <button
             onClick={() => setIsProfileModalOpen(false)}
-            disabled={loading.image}
+            disabled={loading?.image}
             className="absolute top-4 right-4 text-gray-400 hover:text-white disabled:opacity-50"
           >
             ✕
@@ -118,8 +120,8 @@ const ProfileModal = () => {
                   >
                     <img
                       src={
-                        formData.profileImage ||
-                        user.user.profileImage ||
+                        formData?.profileImage ||
+                        user?.user?.profileImage ||
                         "/default-profile.png"
                       }
                       alt="Profile"
@@ -137,7 +139,7 @@ const ProfileModal = () => {
                     accept="image/*"
                     onChange={handleImageChange}
                     className="hidden"
-                    disabled={loading.image}
+                    disabled={loading?.image}
                   />
                   <p className="text-xs text-gray-400 mt-2">
                     Click image to upload new photo
@@ -146,9 +148,9 @@ const ProfileModal = () => {
 
                 <div className="text-center w-full">
                   <h2 className="text-xl font-bold text-white">
-                    {user.user.userName}
+                    {user?.user?.userName}
                   </h2>
-                  <p className="text-gray-400">{user.user.email}</p>
+                  <p className="text-gray-400">{user?.user?.email}</p>
 
                   {error && (
                     <p className="text-red-400 text-sm mt-2">{error}</p>
@@ -160,7 +162,7 @@ const ProfileModal = () => {
                   <div className="mt-6">
                     <button
                       onClick={logout}
-                      disabled={loading.image}
+                      disabled={loading?.image}
                       className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Logout

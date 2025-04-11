@@ -23,6 +23,7 @@ const AuthProvider = ({ children }) => {
     }
   });
 
+  // Profile Model state management
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
 
   useEffect(() => {

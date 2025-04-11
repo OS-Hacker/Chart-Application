@@ -3,6 +3,7 @@ const authUser = require("../middleware/auth.middleware");
 const {
   SendMessageController,
   GetMessageController,
+  deleteMessage,
 } = require("../controllers/message.controller");
 const { upload } = require("../helper/helpers");
 
@@ -16,5 +17,9 @@ messageRoutes.post(
 );
 
 messageRoutes.get("/get/:id", authUser, GetMessageController);
+
+// delete message
+
+messageRoutes.delete("/delete/:messageId", authUser, deleteMessage);
 
 module.exports = messageRoutes;
