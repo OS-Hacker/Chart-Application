@@ -3,7 +3,6 @@ const { getReceiverSocketId, io } = require("./../SocketIo/server");
 const messageModel = require("../models/Message.model");
 const { ObjectId } = require("mongoose").Types;
 const cloudinary = require("../lib/cloudinary");
-const { getReceiverSocketId, io } = require("../socket/socket");
 
 
 async function SendMessageController(req, res) {

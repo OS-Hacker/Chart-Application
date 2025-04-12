@@ -19,7 +19,6 @@ messageRoutes.post(
 messageRoutes.get("/get/:id", authUser, GetMessageController);
 
 // delete message
-
 messageRoutes.delete("/delete/:messageId", authUser, deleteMessage);
 
 module.exports = messageRoutes;
