@@ -1,6 +1,7 @@
 import { useAuth } from "../context/AuthProvider";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const ProfileModal = () => {
   const { user, setUser, isProfileModalOpen, setIsProfileModalOpen, logout } =
@@ -13,7 +14,7 @@ const ProfileModal = () => {
   const [loading, setLoading] = useState({
     image: false,
   });
-  
+
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
@@ -161,7 +162,10 @@ const ProfileModal = () => {
 
                   <div className="mt-6">
                     <button
-                      onClick={logout}
+                      onClick={() => {
+                        logout();
+                        toast.success("Logout Successfull!");
+                      }}
                       disabled={loading?.image}
                       className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >

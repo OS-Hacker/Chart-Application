@@ -67,11 +67,9 @@ const App = () => {
         <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
       </Routes>
 
-      <ToastContainer />
+      <ToastContainer position="top-center" />
     </div>
   );
 };
 
 export default App;
-
-

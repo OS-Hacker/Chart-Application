@@ -40,7 +40,6 @@ const AuthProvider = ({ children }) => {
       localStorage.removeItem("user");
       delete axios.defaults.headers.common["Authorization"];
       setIsProfileModalOpen(false); // Close modal on logout
-      toast.success("Logout Successfull!");
       <Navigate to="/login" />;
     } catch (error) {
       console.error("Error during logout:", error);
