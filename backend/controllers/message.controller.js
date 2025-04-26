@@ -4,7 +4,6 @@ const messageModel = require("../models/Message.model");
 const { ObjectId } = require("mongoose").Types;
 const cloudinary = require("../lib/cloudinary");
 
-
 async function SendMessageController(req, res) {
   try {
     const { message } = req.body;
@@ -103,69 +102,71 @@ const GetMessageController = async (req, res) => {
  * @param {Object} req - Express request object
  * @param {Object} res - Express response object
  */
+// Enhanced deleteMessage controller
 const deleteMessage = async (req, res) => {
   try {
     const { messageId } = req.params;
     const userId = req.user._id;
     const { deleteForEveryone } = req.body;
 
-    console.log(messageId)
-    console.log(userId);
-    console.log(deleteForEveryone);
-
-    // Validate message ID
-    if (!messageId) {
-      return res.status(400).json({ error: "Message ID is required" });
+    if (!ObjectId.isValid(messageId)) {
+      return res.status(400).json({ error: "Invalid message ID" });
     }
 
-    // Find the message
     const message = await messageModel.findById(messageId);
     if (!message) {
       return res.status(404).json({ error: "Message not found" });
     }
 
-    // Check authorization
-    const isSender = message.senderId.toString() === userId.toString();
-
-    // Delete for everyone logic (only sender can do this)
-    if (deleteForEveryone) {
-      if (!isSender) {
-        return res
-          .status(403)
-          .json({ error: "Only the sender can delete for everyone" });
-      }
-
-      // Update message as deleted
-      const updatedMessage = await messageModel.findByIdAndUpdate(
-        messageId,
-        {
-          $set: {
-            content: "This message was deleted",
-            image: null,
-            deleted: true,
-            deletedForEveryone: true,
-          },
-        },
-        { new: true }
-      );
-
-      // Notify all participants
-      notifyParticipants(updatedMessage, true);
-
-      return res.status(200).json(updatedMessage);
+    // Verify user is participant in conversation
+    const conversation = await Conversation.findOne({
+      participants: userId,
+      messages: messageId
+    });
+    
+    if (!conversation) {
+      return res.status(403).json({ error: "Not authorized to delete this message" });
     }
 
-    // Delete for me logic (any participant can do this)
+    const isSender = message.senderId.toString() === userId.toString();
+
+    if (deleteForEveryone && !isSender) {
+      return res.status(403).json({ 
+        error: "Only the sender can delete for everyone" 
+      });
+    }
+
+    // Different update operations based on deletion type
+    const updateOperation = deleteForEveryone
+      ? {
+          $set: {
+            message: "This message was deleted",
+            image: null,
+            deletedForEveryone: true,
+            deletedAt: new Date()
+          }
+        }
+      : {
+          $addToSet: { deletedFor: userId }
+        };
+
     const updatedMessage = await messageModel.findByIdAndUpdate(
       messageId,
-      {
-        $addToSet: { deletedFor: userId },
-      },
+      updateOperation,
       { new: true }
     );
 
-    // Notify other participants
-    notifyParticipants(updatedMessage, false);
+    // Notify via socket
+    const receiverId = isSender ? message.receiverId : message.senderId;
+    const socketId = getReceiverSocketId(receiverId);
+    
+    if (socketId) {
+      io.to(socketId).emit("messageDeleted", {
+        messageId,
+        deleteForEveryone,
+        conversationId: conversation._id
+      });
+    }
 
     res.status(200).json(updatedMessage);
   } catch (error) {

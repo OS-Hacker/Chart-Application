@@ -3,8 +3,8 @@ import { Outlet, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthProvider";
 
-const ProtectedRoutes = () => {
-  const { user } = useAuth();
+const ProtectedRoutes = ({}) => {
+  const { user, logout } = useAuth();
   const [ok, setOk] = useState(false);
   const [loading, setLoading] = useState(true); // Add a loading state
   const navigate = useNavigate();
@@ -29,8 +29,12 @@ const ProtectedRoutes = () => {
         }
       } catch (error) {
         console.error("Authentication check failed:", error);
-        setOk(false);
         navigate("/login"); // Redirect to login on error
+        // If token verification failed, clear user data
+        if (error.response?.status === 401) {
+          logout(); // Clear user from context and local storage
+        }
+        setOk(false);
       } finally {
         setLoading(false); // Set loading to false after the check is complete
       }
@@ -42,7 +46,7 @@ const ProtectedRoutes = () => {
       setLoading(false); // If there's no token, no need to check auth
       navigate("/login"); // Redirect to login if no token is present
     }
-  }, [user?.token, navigate]);
+  }, [user?.token, navigate, logout]);
 
   if (loading) {
     return (
